@@ -7,7 +7,7 @@ import argparse
 ap = argparse.ArgumentParser()
 ap.add_argument('--image', help='Path to image file')
 ap.add_argument('--calibrate-board', help='Calibrate board points and save to specified file', default=False)
-ap.add_argument('--transform-board', help='Transform board using points from specified file', default=False)
+ap.add_argument('--transform-board', help='Transform board using points from specified file', nargs='*')
 args = vars(ap.parse_args())
 
 if args["calibrate_board"]:
@@ -19,13 +19,13 @@ if args["calibrate_board"]:
     else:
         print("Expected 4 points, got " + str(len(points)))
 elif args["transform_board"]:
-    points = []
-    with open(args["transform_board"]) as f:
-        points = np.array(json.load(f), dtype="float32")
-
     original = cv.imread(args["image"])
-    result = board_transform.four_point_transform(original, points)
-    cv.imshow("Original", original)
-    cv.waitKey(0)
-    cv.imshow("Warped", result)
+    cv.imshow(args["image"], original)
+
+    for transform in args["transform_board"]:
+        print(transform)
+        with open(transform) as f:
+            points = np.array(json.load(f), dtype="float32")
+            result = board_transform.four_point_transform(original, points)
+            cv.imshow(transform, result)
     cv.waitKey(0)
