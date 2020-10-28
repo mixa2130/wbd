@@ -4,11 +4,12 @@ import cv2 as cv
 import numpy as np
 import argparse
 from ISR.models import RDN
-from PIL import Image
+import urllib.request
 
 ap = argparse.ArgumentParser()
-ap.add_argument('--image', help='Path to image file')
-ap.add_argument('--calibrate-board', help='Calibrate board points and save to specified file', default=False)
+ap.add_argument('--image-path', help='Path to image file')
+ap.add_argument('--image-url', help='Image URL')
+ap.add_argument('--calibrate-board', help='Calibrate board points using GUI and save to specified file', default=False)
 ap.add_argument('--transform-board', help='Transform board using points from specified file(s)', nargs='*')
 ap.add_argument('--save-as', help='Save transformed boards to specified file(s)', nargs='*')
 ap.add_argument('--superres', help='Apply super-resolution (slow!)', default=False, action='store_true')
@@ -27,7 +28,13 @@ elif args["transform_board"]:
     if args["superres"]:
         rdn = RDN(weights='psnr-small')
 
-    original = cv.imread(args["image"])
+    if args["image_path"]:
+        original = cv.imread(args["image_path"])
+    elif args["image_url"]:
+        res = urllib.request.urlopen(args["image_url"])
+        original = np.asarray(bytearray(res.read()), dtype="uint8")
+        original = cv.imdecode(original, cv.IMREAD_COLOR)
+
     if args["gui"]:
         cv.imshow(args["image"], original)
 
