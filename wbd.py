@@ -4,7 +4,7 @@ import cv2 as cv
 import numpy as np
 import argparse
 from ISR.models import RDN
-import urllib.request
+import requests
 
 ap = argparse.ArgumentParser()
 ap.add_argument('--image-path', help='Path to image file')
@@ -31,8 +31,8 @@ elif args["transform"]:
     if args["image_path"]:
         original = cv.imread(args["image_path"])
     elif args["image_url"]:
-        res = urllib.request.urlopen(args["image_url"])
-        original = np.asarray(bytearray(res.read()), dtype="uint8")
+        res = requests.get(args["image_url"], stream=True).content
+        original = np.asarray(bytearray(res), dtype="uint8")
         original = cv.imdecode(original, cv.IMREAD_COLOR)
     else:
         print("Neither `--image-path` nor `--image-url` a specified, use `--help` to print usage")
