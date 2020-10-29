@@ -42,7 +42,7 @@ elif args["transform"]:
         print("Neither `--image-path` nor `--image-url` a specified, use `--help` to print usage")
         exit(1)
 
-    if args["output-original"]:
+    if args["output_original"]:
         cv.imwrite(args["output_original"], original)
 
     if args["gui"]:
