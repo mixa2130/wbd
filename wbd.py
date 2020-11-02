@@ -17,7 +17,7 @@ ap.add_argument('--output-original', help='Save original to specified file(s)')
 args = vars(ap.parse_args())
 
 if args["calibrate"]:
-    points = board_calibration.board_calibration(cv.imread(args["image"]))
+    points = board_calibration.board_calibration(cv.imread(args["image_path"]))
 
     if len(points) == 4:
         with open(args["calibrate"], 'w') as f:
