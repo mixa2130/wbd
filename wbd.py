@@ -28,6 +28,7 @@ elif args["image_rtsp"]:
     if not res:
         print("Failed to grab frame from specified rtsp stream")
         exit(1)
+    original = frame
 else:
     print("Neither `--image-path`, `--image-url` or `--image-rtsp` was specified, use `--help` to print usage")
     exit(1)
