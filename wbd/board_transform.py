@@ -23,7 +23,7 @@ def order_points(pts):
     return rect
 
 
-def four_point_transform(image, pts):
+def four_point_transform(image, pts, aspectRatio):
     # obtain a consistent order of the points and unpack them
     # individually
     rect = order_points(pts)
@@ -53,5 +53,8 @@ def four_point_transform(image, pts):
     # compute the perspective transform matrix and then apply it
     M = cv.getPerspectiveTransform(rect, dst)
     warped = cv.warpPerspective(image, M, (maxWidth, maxHeight))
+    warpedAspectRatio = warped.shape[:2][1] / warped.shape[:2][0]
+    k = warpedAspectRatio/aspectRatio
+    warped = cv.resize(warped, (int(warped.shape[:2][1]), int(warped.shape[:2][0] * k)))
     # return the warped image
     return warped

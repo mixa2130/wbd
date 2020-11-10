@@ -10,7 +10,7 @@ def board_calibration(img):
             cv.circle(img, (x, y), 10, colors[len(points)], -1)
             points.append((x, y))
 
-    cv.namedWindow('Calibrate board')
+    cv.namedWindow('Calibrate board', cv.WINDOW_NORMAL)
     cv.setMouseCallback('Calibrate board', m_callback)
 
     while 1:

@@ -33,19 +33,30 @@ else:
     exit(1)
 
 if args["calibrate"]:
-    points = board_calibration.board_calibration(original)
+    h, w = original.shape[:2]
+    w_ = 1080
+    h_ = 720
+    k_w = w/w_
+    k_h = h/h_
+    preview = cv.resize(original, (w_, h_))
+    points = board_calibration.board_calibration(preview)
 
     if len(points) == 4:
+        points = [(p_x * k_w, p_y * k_h) for p_x, p_y in points]
         with open(args["calibrate"], 'w') as f:
-            json.dump(points, f)
+            json.dump({
+                "points": points,
+                "aspectRatio": 1.5
+            }, f)
     else:
         print("Expected 4 points, got " + str(len(points)))
 elif args["transform"]:
     idx = 0
     for transform in args["transform"]:
         with open(transform) as f:
-            points = np.array(json.load(f), dtype="float32")
-            result = board_transform.four_point_transform(original, points)
+            data = json.load(f)
+            points = np.array(data["points"], dtype="float32")
+            result = board_transform.four_point_transform(original, points, data["aspectRatio"])
 
             if args["output"] and len(args["output"]) > 0:
                 cv.imwrite(args["output"].pop(0), result)
