@@ -1,6 +1,4 @@
 opencv-python
 numpy
-ISR
 scipy
-tensorflow
 requests
