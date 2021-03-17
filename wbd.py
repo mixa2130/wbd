@@ -1,5 +1,5 @@
 import json
-from wbd import board_calibration, board_transform
+from wbd import board_calibration, board_transform, postprocessing
 import cv2 as cv
 import numpy as np
 import argparse
@@ -47,7 +47,9 @@ if args["calibrate"]:
         with open(args["calibrate"], 'w') as f:
             json.dump({
                 "points": points,
-                "aspectRatio": 1.5
+                "aspectRatio": 1.5,
+                "brightness": 0,
+                "contrast": 0
             }, f)
     else:
         print("Expected 4 points, got " + str(len(points)))
@@ -58,6 +60,7 @@ elif args["transform"]:
             data = json.load(f)
             points = np.array(data["points"], dtype="float32")
             result = board_transform.four_point_transform(original, points, data["aspectRatio"])
+            result = postprocessing.postprocessing(result, data["brightness"], data["contrast"])
 
             if args["output"] and len(args["output"]) > 0:
                 cv.imwrite(args["output"].pop(0), result)

@@ -12,8 +12,8 @@ Crops and corrects perspective of whiteboard from image.
 
 **Left board, cropped and perspecrive wrapped**
 
-<img src="./left.jpg" width="500">
+<img src="./out_left.jpg" width="500">
 
 **Right board, cropped and perspecrive wrapped**
 
-<img src="./right.jpg" width="500">
+<img src="./out_right.jpg" width="500">
