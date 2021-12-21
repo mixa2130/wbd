@@ -27,6 +27,7 @@ def four_point_transform(image, pts, aspectRatio, mode):
     # obtain a consistent order of the points and unpack them
     # individually
     rect = order_points(pts)
+
     (tl, tr, br, bl) = rect
     # compute the width of the new image, which will be the
     # maximum distance between bottom-right and bottom-left
@@ -60,10 +61,10 @@ def four_point_transform(image, pts, aspectRatio, mode):
     if mode == 'left':
         # LEFT
         dst = np.array([
-            [6.2, -7],
-            [maxWidth + 9, -10],  # RIGHT TOP
-            [maxWidth - 6, maxHeight + 6],  # RIGHT BOTTOM
-            [-18, maxHeight - 4.2]], dtype="float32")
+            [0, -10],  # LEFT TOP
+            [maxWidth + 9, -22],  # RIGHT TOP
+            [maxWidth - 3, maxHeight + 6],  # RIGHT BOTTOM
+            [-21, maxHeight - 1.6]], dtype="float32")
 
     # ----------------------------------
     if mode == 'sheet':
